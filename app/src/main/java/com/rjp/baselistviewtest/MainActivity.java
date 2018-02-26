@@ -13,5 +13,6 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         OpenPrizeListView layout = (OpenPrizeListView) findViewById(R.id.open_list_view);
+        layout.requestData();
     }
 }

@@ -6,8 +6,8 @@
               android:layout_height="60dp">
     <ImageView
         android:id="@+id/iv_arrow"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:src="@mipmap/ic_arrow_down"
         />
 
@@ -21,14 +21,21 @@
             android:id="@+id/tv_msg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="下拉刷新"
+            android:text="下拉可以刷新"
+            android:minWidth="120dp"
+            android:textSize="14dp"
+            android:textColor="#333"
             />
 
         <TextView
             android:id="@+id/tv_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="时间"
+            android:text="上次刷新: 今天 16:43"
+            android:minWidth="120dp"
+            android:textSize="12dp"
+            android:textColor="#666"
+            android:layout_marginTop="4dp"
             />
     </LinearLayout>
 </LinearLayout>

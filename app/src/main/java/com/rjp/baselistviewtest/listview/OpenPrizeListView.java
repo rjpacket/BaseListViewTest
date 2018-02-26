@@ -6,7 +6,6 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.BaseAdapter;
 
-import com.rjp.baselistview.BaseListView;
 import com.rjp.baselistviewtest.OpenPrizeModel;
 import com.rjp.baselistviewtest.R;
 import com.rjp.baselistviewtest.okhttp.BaseModel;
@@ -24,7 +23,7 @@ import java.util.Map;
  * email  : jimbo922@163.com
  */
 
-public class OpenPrizeListView extends BaseListView<OpenPrizeModel> {
+public class OpenPrizeListView extends CustomListView<OpenPrizeModel> {
 
 
     public OpenPrizeListView(Context context) {
@@ -33,6 +32,17 @@ public class OpenPrizeListView extends BaseListView<OpenPrizeModel> {
 
     public OpenPrizeListView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+    }
+
+    @Override
+    protected void resetFirstPage() {
+        mPage = 1;
+        mPageSize = 6;
+    }
+
+    @Override
+    protected boolean isFirstPage() {
+        return mPage == 1;
     }
 
     @Override
@@ -51,10 +61,10 @@ public class OpenPrizeListView extends BaseListView<OpenPrizeModel> {
     }
 
     @Override
-    protected void requestData() {
+    public void requestData() {
         Params params = new Params();
         params.putt("lotteryType", "1001");
-        params.putt("pageIndex", mPage + 1);
+        params.putt("pageIndex", mPage);
         params.putt("maxResult", mPageSize);
         Log.d("----params---->", params.toString());
         NetUtils.getInstance().request1(mContext, "wincodeHistory", params, new NetUtils.NetCallBack1() {

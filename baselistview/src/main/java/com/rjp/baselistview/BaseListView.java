@@ -31,8 +31,8 @@ public abstract class BaseListView<T> extends LinearLayout {
     private ListView listView;
     private BaseAdapter listAdapter;
     public List<T> mDatas = new ArrayList<>();
-    public int mPage = 0;
-    public int mPageSize = 5;
+    public int mPage;
+    public int mPageSize;
     private View emptyView;
 
     public BaseListView(Context context) {
@@ -47,19 +47,29 @@ public abstract class BaseListView<T> extends LinearLayout {
 
     private void initView(Context context) {
         LayoutInflater.from(context).inflate(R.layout.layout_base_list_view, this);
-        emptyView = LayoutInflater.from(mContext).inflate(R.layout.layout_empty, null);
-        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        emptyView.setLayoutParams(params);
-        emptyView.setVisibility(GONE);
-        addView(emptyView);
+        emptyView = getEmptyView();
+        if(emptyView != null) {
+            ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            emptyView.setLayoutParams(params);
+            emptyView.setVisibility(GONE);
+            addView(emptyView);
+        }
+
         refreshLayout = (SmartRefreshLayout) findViewById(R.id.pull_to_refresh_layout);
         refreshLayout.setDragRate(0.5f); //阻尼
         refreshLayout.setReboundDuration(300); // 回弹时间
-        refreshLayout.setRefreshHeader(new DefaultHeader(mContext));
+        refreshLayout.setRefreshHeader(getRefreshHeader());
+        refreshLayout.setEnableOverScrollDrag(false);
+        RefreshFooter refreshFooter = getRefreshFooter();
+        if(refreshFooter != null) {
+            refreshLayout.setRefreshFooter(refreshFooter);
+        }else{
+            refreshLayout.setEnableLoadMore(false);
+        }
         refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(final RefreshLayout refreshLayout) {
-                mPage = 0;
+                resetFirstPage();
                 requestData();
             }
         });
@@ -73,7 +83,7 @@ public abstract class BaseListView<T> extends LinearLayout {
         listView = (ListView) findViewById(R.id.list_view);
         listAdapter = getListAdapter();
         listView.setAdapter(listAdapter);
-        requestData();
+        resetFirstPage();
     }
 
     /**
@@ -81,7 +91,6 @@ public abstract class BaseListView<T> extends LinearLayout {
      * @param data
      */
     public void dealSuccessData(Object data){
-        List<T> list = parseData(data);
         if (isFirstPage()) {
             refreshLayout.finishRefresh();
             refreshLayout.setNoMoreData(false);
@@ -89,6 +98,7 @@ public abstract class BaseListView<T> extends LinearLayout {
         }else{
             refreshLayout.finishLoadMore();
         }
+        List<T> list = parseData(data);
         if (hasMoreData(list)) {
             pageNext();
         } else {
@@ -121,59 +131,32 @@ public abstract class BaseListView<T> extends LinearLayout {
     }
 
     /**
-     * 筛选数据
-     * @param mDatas
+     * 设置刷新底部布局
+     * @return RefreshFooter
      */
-    protected void filterData(List<T> mDatas){
-
-    }
+    protected abstract RefreshFooter getRefreshFooter();
 
     /**
-     * 页数自增
+     * 设置刷新头部布局
+     * @return RefreshHeader
      */
-    protected void pageNext(){
-        mPage ++;
-    }
+    protected abstract RefreshHeader getRefreshHeader();
 
     /**
-     * 是否还有更多数据
-     * @return
+     * 重置刷新页码
      */
-    protected boolean hasMoreData(List<T> list){
-        return list.size() >= mPageSize;
-    }
+    protected abstract void resetFirstPage();
 
     /**
-     * 如果是首页请求到的数据
-     * @return
+     * 获取空的页面展示
+     * @return View
      */
-    protected boolean isFirstPage(){
-        return mPage == 0;
-    }
+    protected abstract View getEmptyView();
 
     /**
-     * 转化数据
-     * @param data
-     * @return
+     * 获取listview适配器
+     * @return BaseAdapter
      */
-    protected abstract List<T> parseData(Object data);
-
-    /**
-     * 设置头布局
-     * @param headerView
-     */
-    public void setHeaderView(RefreshHeader headerView){
-        refreshLayout.setRefreshHeader(headerView);
-    }
-
-    /**
-     * 设置底部布局
-     * @param footerView
-     */
-    public void setFooterView(RefreshFooter footerView){
-        refreshLayout.setRefreshFooter(footerView);
-    }
-
     protected abstract BaseAdapter getListAdapter();
 
     /**
@@ -181,11 +164,32 @@ public abstract class BaseListView<T> extends LinearLayout {
      */
     protected abstract void requestData();
 
-    public void setPage(int mPage) {
-        this.mPage = mPage;
-    }
+    /**
+     * 筛选数据
+     */
+    protected abstract void filterData(List<T> mDatas);
 
-    public void setPageSize(int mPageSize) {
-        this.mPageSize = mPageSize;
-    }
+    /**
+     * 页数自增
+     */
+    protected abstract void pageNext();
+
+    /**
+     * 是否还有更多数据
+     * @return boolean
+     */
+    protected abstract boolean hasMoreData(List<T> list);
+
+    /**
+     * 如果是首页请求到的数据
+     * @return boolean
+     */
+    protected abstract boolean isFirstPage();
+
+    /**
+     * 转化数据
+     * @param data 后台请求数据
+     * @return List<T>
+     */
+    protected abstract List<T> parseData(Object data);
 }
