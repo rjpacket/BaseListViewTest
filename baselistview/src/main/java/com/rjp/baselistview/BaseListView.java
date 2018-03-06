@@ -6,9 +6,8 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshFooter;
@@ -17,23 +16,18 @@ import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * author : Gimpo create on 2018/2/11 11:05
  * email  : jimbo922@163.com
  */
 
-public abstract class BaseListView<T> extends LinearLayout {
+public abstract class BaseListView<T> extends LinearLayout implements AdapterView.OnItemClickListener{
     public Context mContext;
     public SmartRefreshLayout refreshLayout;
-    private ListView listView;
-    private BaseAdapter listAdapter;
-    public List<T> mDatas = new ArrayList<>();
     public int mPage;
     public int mPageSize;
-    private View emptyView;
+    public View emptyView;
+    public LayoutInflater layoutInflater;
 
     public BaseListView(Context context) {
         this(context, null);
@@ -42,11 +36,12 @@ public abstract class BaseListView<T> extends LinearLayout {
     public BaseListView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         mContext = context;
+        layoutInflater = LayoutInflater.from(mContext);
         initView(context);
     }
 
     private void initView(Context context) {
-        LayoutInflater.from(context).inflate(R.layout.layout_base_list_view, this);
+        inflateLayout();
         emptyView = getEmptyView();
         if(emptyView != null) {
             ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
@@ -80,64 +75,22 @@ public abstract class BaseListView<T> extends LinearLayout {
             }
         });
 
-        listView = (ListView) findViewById(R.id.list_view);
-        listAdapter = getListAdapter();
-        listView.setAdapter(listAdapter);
         resetFirstPage();
+        initChildView();
     }
 
-    /**
-     * 处理请求到的数据
-     * @param data
-     */
-    public void dealSuccessData(Object data){
-        if (isFirstPage()) {
-            refreshLayout.finishRefresh();
-            refreshLayout.setNoMoreData(false);
-            mDatas.clear();
-        }else{
-            refreshLayout.finishLoadMore();
-        }
-        List<T> list = parseData(data);
-        if (hasMoreData(list)) {
-            pageNext();
-        } else {
-            refreshLayout.finishLoadMoreWithNoMoreData();
-        }
-        if (list.size() == 0 && isFirstPage()) {
-            showEmptyView();
-        } else {
-            hideEmptyView();
-            mDatas.addAll(list);
-        }
-        filterData(mDatas);
-        listAdapter.notifyDataSetChanged();
-    }
+    protected abstract void initChildView();
+
+    protected abstract void inflateLayout();
 
     /**
-     * 隐藏空页面
-     */
-    private void hideEmptyView() {
-        emptyView.setVisibility(GONE);
-        refreshLayout.setVisibility(VISIBLE);
-    }
-
-    /**
-     * 显示空数据页面
-     */
-    protected void showEmptyView(){
-        refreshLayout.setVisibility(GONE);
-        emptyView.setVisibility(VISIBLE);
-    }
-
-    /**
-     * 设置刷新底部布局
+     * 获取刷新底部布局
      * @return RefreshFooter
      */
     protected abstract RefreshFooter getRefreshFooter();
 
     /**
-     * 设置刷新头部布局
+     * 获取刷新头部布局
      * @return RefreshHeader
      */
     protected abstract RefreshHeader getRefreshHeader();
@@ -153,43 +106,10 @@ public abstract class BaseListView<T> extends LinearLayout {
      */
     protected abstract View getEmptyView();
 
-    /**
-     * 获取listview适配器
-     * @return BaseAdapter
-     */
-    protected abstract BaseAdapter getListAdapter();
+
 
     /**
      * 请求数据
      */
     protected abstract void requestData();
-
-    /**
-     * 筛选数据
-     */
-    protected abstract void filterData(List<T> mDatas);
-
-    /**
-     * 页数自增
-     */
-    protected abstract void pageNext();
-
-    /**
-     * 是否还有更多数据
-     * @return boolean
-     */
-    protected abstract boolean hasMoreData(List<T> list);
-
-    /**
-     * 如果是首页请求到的数据
-     * @return boolean
-     */
-    protected abstract boolean isFirstPage();
-
-    /**
-     * 转化数据
-     * @param data 后台请求数据
-     * @return List<T>
-     */
-    protected abstract List<T> parseData(Object data);
 }

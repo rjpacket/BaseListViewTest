@@ -5,8 +5,9 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 
-import com.rjp.baselistview.BaseListView;
+import com.rjp.baselistview.simple.SimpleListView;
 import com.rjp.baselistviewtest.R;
 import com.scwang.smartrefresh.layout.api.RefreshFooter;
 import com.scwang.smartrefresh.layout.api.RefreshHeader;
@@ -18,7 +19,7 @@ import java.util.List;
  * email  : jimbo922@163.com
  */
 
-public abstract class CustomListView<T> extends BaseListView<T> {
+public abstract class CustomListView<T> extends SimpleListView<T> {
 
     public CustomListView(Context context) {
         super(context);
@@ -45,6 +46,18 @@ public abstract class CustomListView<T> extends BaseListView<T> {
 
     @Override
     protected void filterData(List<T> mDatas) {
+
+    }
+
+    /**
+     * 新增 listView 的点击回调
+     * @param parent parent
+     * @param view view
+     * @param position position
+     * @param id id
+     */
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
     }
 

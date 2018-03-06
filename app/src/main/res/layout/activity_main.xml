@@ -9,12 +9,27 @@
     tools:context="com.rjp.baselistviewtest.MainActivity"
     >
 
-    <com.rjp.baselistviewtest.listview.OpenPrizeListView
-        android:id="@+id/open_list_view"
+    <!--<com.rjp.baselistviewtest.listview.OpenPrizeListView-->
+        <!--android:id="@+id/open_list_view"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--&gt;-->
+
+    <!--</com.rjp.baselistviewtest.listview.OpenPrizeListView>-->
+
+    <Button
+        android:id="@+id/request"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="request"
+        />
+
+    <com.rjp.baselistviewtest.listview.AListView
+        android:id="@+id/alist_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         >
 
-    </com.rjp.baselistviewtest.listview.OpenPrizeListView>
+    </com.rjp.baselistviewtest.listview.AListView>
 
 </LinearLayout>
