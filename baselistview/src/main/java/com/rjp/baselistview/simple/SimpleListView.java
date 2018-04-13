@@ -10,7 +10,6 @@ import android.widget.ListView;
 import com.rjp.baselistview.BaseListView;
 import com.rjp.baselistview.R;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,9 +18,9 @@ import java.util.List;
  */
 
 public abstract class SimpleListView<T> extends BaseListView<T> {
-    public List<T> mDatas = new ArrayList<>();
-    private ListView listView;
+    public ListView listView;
     private BaseAdapter listAdapter;
+
 
     public SimpleListView(Context context) {
         super(context);
@@ -70,6 +69,26 @@ public abstract class SimpleListView<T> extends BaseListView<T> {
         }
         filterData(mDatas);
         listAdapter.notifyDataSetChanged();
+    }
+
+    /**
+     * 处理失败的数据，主要是结束刷新
+     */
+    public void dealFailureData(){
+        if (isFirstPage()) {
+            refreshLayout.finishRefresh();
+        }else{
+            refreshLayout.finishLoadMore();
+        }
+    }
+
+    /**
+     * 刷新数据
+     */
+    public void notifyData() {
+        if(listAdapter != null) {
+            listAdapter.notifyDataSetChanged();
+        }
     }
 
     /**

@@ -16,6 +16,9 @@ import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * author : Gimpo create on 2018/2/11 11:05
  * email  : jimbo922@163.com
@@ -28,6 +31,7 @@ public abstract class BaseListView<T> extends LinearLayout implements AdapterVie
     public int mPageSize;
     public View emptyView;
     public LayoutInflater layoutInflater;
+    public List<T> mDatas = new ArrayList<>();
 
     public BaseListView(Context context) {
         this(context, null);

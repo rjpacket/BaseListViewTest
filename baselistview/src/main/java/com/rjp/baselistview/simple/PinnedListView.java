@@ -9,16 +9,12 @@ import com.rjp.baselistview.R;
 import com.rjp.baselistview.pinned.PinnedHeaderExpandableAdapter;
 import com.rjp.baselistview.pinned.PinnedHeaderExpandableListView;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * author : Gimpo create on 2018/3/2 14:25
  * email  : jimbo922@163.com
  */
 
 public abstract class PinnedListView<T> extends BaseListView<T> {
-    public List<T> mDatas = new ArrayList<>();
     public PinnedHeaderExpandableListView listView;
     private PinnedHeaderExpandableAdapter listAdapter;
 
