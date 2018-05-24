@@ -11,6 +11,7 @@ import com.rjp.baselistview.simple.SimpleListView;
 import com.rjp.baselistviewtest.R;
 import com.scwang.smartrefresh.layout.api.RefreshFooter;
 import com.scwang.smartrefresh.layout.api.RefreshHeader;
+import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
 
 import java.util.List;
 
@@ -31,7 +32,7 @@ public abstract class CustomListView<T> extends SimpleListView<T> {
 
     @Override
     protected RefreshFooter getRefreshFooter() {
-        return null;
+        return new ClassicsFooter(mContext);
     }
 
     @Override

@@ -9,13 +9,11 @@ import android.widget.BaseAdapter;
 import com.rjp.baselistviewtest.OpenPrizeModel;
 import com.rjp.baselistviewtest.R;
 import com.rjp.baselistviewtest.okhttp.BaseModel;
-import com.rjp.baselistviewtest.okhttp.JSONUtil;
 import com.rjp.baselistviewtest.okhttp.NetUtils;
 import com.rjp.baselistviewtest.okhttp.Params;
 import com.zhy.adapter.abslistview.CommonAdapter;
 import com.zhy.adapter.abslistview.ViewHolder;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -46,8 +44,8 @@ public class OpenPrizeListView extends CustomListView<OpenPrizeModel> {
     }
 
     @Override
-    protected List<OpenPrizeModel> parseData(Object data) {
-        return JSONUtil.getList(data.toString(), OpenPrizeModel.class);
+    protected Class<OpenPrizeModel> getModelType() {
+        return OpenPrizeModel.class;
     }
 
     @Override

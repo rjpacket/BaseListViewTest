@@ -24,12 +24,12 @@
         android:text="request"
         />
 
-    <com.rjp.baselistviewtest.listview.AListView
+    <com.rjp.baselistviewtest.listview.BListView
         android:id="@+id/alist_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         >
 
-    </com.rjp.baselistviewtest.listview.AListView>
+    </com.rjp.baselistviewtest.listview.BListView>
 
 </LinearLayout>

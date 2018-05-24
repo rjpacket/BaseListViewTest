@@ -10,6 +10,8 @@ import android.widget.ListView;
 import com.rjp.baselistview.BaseListView;
 import com.rjp.baselistview.R;
 
+import com.alibaba.fastjson.JSONArray;
+
 import java.util.List;
 
 /**
@@ -55,7 +57,7 @@ public abstract class SimpleListView<T> extends BaseListView<T> {
         }else{
             refreshLayout.finishLoadMore();
         }
-        List<T> list = parseData(data);
+        List<T> list = JSONArray.parseArray(data.toString(), getModelType());
         if (hasMoreData(list)) {
             pageNext();
         } else {
@@ -70,6 +72,12 @@ public abstract class SimpleListView<T> extends BaseListView<T> {
         filterData(mDatas);
         listAdapter.notifyDataSetChanged();
     }
+
+    /**
+     * 获取数据的类型
+     * @return
+     */
+    protected abstract Class<T> getModelType();
 
     /**
      * 处理失败的数据，主要是结束刷新
@@ -134,11 +142,4 @@ public abstract class SimpleListView<T> extends BaseListView<T> {
      * @return boolean
      */
     protected abstract boolean isFirstPage();
-
-    /**
-     * 转化数据
-     * @param data 后台请求数据
-     * @return List
-     */
-    protected abstract List<T> parseData(Object data);
 }

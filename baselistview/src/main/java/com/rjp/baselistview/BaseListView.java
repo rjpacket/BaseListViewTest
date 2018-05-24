@@ -55,16 +55,22 @@ public abstract class BaseListView<T> extends LinearLayout implements AdapterVie
         }
 
         refreshLayout = (SmartRefreshLayout) findViewById(R.id.pull_to_refresh_layout);
-        refreshLayout.setDragRate(0.5f); //阻尼
-        refreshLayout.setReboundDuration(300); // 回弹时间
-        refreshLayout.setRefreshHeader(getRefreshHeader());
-        refreshLayout.setEnableOverScrollDrag(false);
+        refreshLayout.setEnableAutoLoadMore(true);
+
+        RefreshHeader refreshHeader = getRefreshHeader();
+        if(refreshHeader != null) {
+            refreshLayout.setRefreshHeader(refreshHeader);
+        }else{
+            refreshLayout.setEnableRefresh(false);
+        }
+
         RefreshFooter refreshFooter = getRefreshFooter();
         if(refreshFooter != null) {
             refreshLayout.setRefreshFooter(refreshFooter);
         }else{
             refreshLayout.setEnableLoadMore(false);
         }
+
         refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(final RefreshLayout refreshLayout) {
