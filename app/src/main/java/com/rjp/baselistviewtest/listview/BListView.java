@@ -23,11 +23,6 @@ public class BListView extends CustomListView<String> {
     }
 
     @Override
-    protected Class<String> getModelType() {
-        return String.class;
-    }
-
-    @Override
     protected BaseAdapter getListAdapter() {
         return new CommonAdapter<String>(mContext, R.layout.item_list_view, mDatas) {
             @Override

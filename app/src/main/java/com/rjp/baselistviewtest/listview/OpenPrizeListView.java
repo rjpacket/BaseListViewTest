@@ -44,11 +44,6 @@ public class OpenPrizeListView extends CustomListView<OpenPrizeModel> {
     }
 
     @Override
-    protected Class<OpenPrizeModel> getModelType() {
-        return OpenPrizeModel.class;
-    }
-
-    @Override
     protected BaseAdapter getListAdapter() {
         return new CommonAdapter<OpenPrizeModel>(mContext, R.layout.item_list_view, mDatas) {
             @Override
@@ -69,7 +64,6 @@ public class OpenPrizeListView extends CustomListView<OpenPrizeModel> {
             @Override
             public void onSuccess(String code, BaseModel result) {
                 Map<String, Object> map = (Map<String, Object>) result.getData();
-                dealSuccessData(map.get("wincodes"));
             }
         });
     }
